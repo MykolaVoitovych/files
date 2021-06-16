@@ -1,7 +1,7 @@
 <template>
     <form>
-        <h5 class="card-title">Create</h5>
-        <b-form-group label="Tagged input using select" label-for="tags-component-select">
+        <h5 class="card-title">Upload file</h5>
+        <b-form-group label="Tags" label-for="tags-component-select">
             <!-- Prop `add-on-change` is needed to enable adding tags vie the `change` event -->
             <b-form-tags
                 id="tags-component-select"
@@ -25,7 +25,7 @@
                     <b-form-select
                         v-bind="inputAttrs"
                         v-on="inputHandlers"
-                        :disabled="disabled || options.length === 0"
+                        :disabled="disabled || getTags.length === 0"
                         :options="options"
                     >
                         <template #first>
@@ -36,11 +36,22 @@
                 </template>
             </b-form-tags>
         </b-form-group>
-        <b-button variant="primary @click.prevent="create"">Button</b-button>
+        <b-form-group label="File" label-for="file">
+            <b-form-file
+                id="file"
+                v-model="form.file"
+                :state="Boolean(form.file)"
+                placeholder="Choose a file or drop it here..."
+                drop-placeholder="Drop file here..."
+            ></b-form-file>
+        </b-form-group>
+        <b-button class="float-right" variant="primary" @click.prevent="create">ADD FILE</b-button>
     </form>
 </template>
 
 <script>
+import {mapGetters} from 'vuex'
+
 export default {
     data () {
         return {
@@ -49,13 +60,19 @@ export default {
                 file: null
             },
             errors: [],
-            options: ['Apple', 'Orange', 'Banana', 'Lime', 'Peach', 'Chocolate', 'Strawberry']
+        }
+    },
+    computed: {
+        ...mapGetters(['getTags']),
+        options () {
+            return this.getTags.map(tag => tag.name)
         }
     },
     methods: {
         create () {
-            let url = route('files.store')
-            axios.post(url, this.form).then(response => {
+            let url = route('file.store')
+            let data = this.makeFormData()
+            axios.post(url, data).then(response => {
                 this.$router.push({ name: 'search'})
             }).catch(error => {
                 let errorStatus = error.response ? error.response.status : null
@@ -64,6 +81,15 @@ export default {
                 }
                 console.error(error)
             })
+        },
+        makeFormData () {
+            let data = new FormData()
+            data.append('file', this.form.file)
+            this.form.tags.forEach((tag, key) => {
+                data.append(`tags[${key}]`, tag)
+            })
+
+            return data
         }
     }
 }

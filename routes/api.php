@@ -14,6 +14,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+Route::post('file', 'FilesController@store')->name('file.store');
+
+Route::get('/files/{query}/page', 'FilesController@search')->name('search');

@@ -15,9 +15,8 @@ import Base from "./Base";
 
 let app
 if (document.getElementById('app')) {
-    // let appElement = document.getElementById('app')
-    //
-    // store.commit('setTags', JSON.parse(appElement.dataset.tags))
+    let appElement = document.getElementById('app')
+    store.commit('setTags', JSON.parse(appElement.dataset.tags))
 
     app = new Vue({
         router,

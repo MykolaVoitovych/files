@@ -14,7 +14,7 @@
         @routes
         <main
             id="app"
-            data-tags=''
+            data-tags='{{ \App\Models\Tag::all() }}'
         >
         </main>
         <script src="{{ asset(mix('js/app.js')) }}"></script>

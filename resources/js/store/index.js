@@ -8,7 +8,7 @@ export default new Vuex.Store({
         tags: null,
     },
     getters: {
-        tags (state) {
+        getTags (state) {
             return state.tags
         }
     },
