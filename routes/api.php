@@ -16,4 +16,4 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('file', 'FilesController@store')->name('file.store');
 
-Route::get('/files/{query}/page', 'FilesController@search')->name('search');
+Route::get('/files/{search_query}', 'FilesController@search')->name('search');

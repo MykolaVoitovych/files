@@ -1,0 +1,204 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Files and Tags",
+        "description": "Files and Tags",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://files.test/api",
+            "description": "Demo API Server"
+        }
+    ],
+    "paths": {
+        "/file": {
+            "post": {
+                "tags": [
+                    "Store File"
+                ],
+                "description": "Create a new file in the application",
+                "operationId": "storeFile",
+                "parameters": [
+                    {
+                        "name": "file",
+                        "in": "query",
+                        "description": "The file",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "base64",
+                            "example": "data:image/jpeg;base64, binaryString"
+                        }
+                    },
+                    {
+                        "name": "tags",
+                        "in": "query",
+                        "description": "A list of tags associate with the file",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "format": "array",
+                            "items": {
+                                "type": "string",
+                                "example": [
+                                    "Tag1",
+                                    "Tag2"
+                                ]
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "required": [
+                                        "id"
+                                    ],
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "format": "integer",
+                                            "example": 1
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "File property is required"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/files/{search_query}": {
+            "get": {
+                "tags": [
+                    "Search"
+                ],
+                "summary": "Search",
+                "description": "Search for files",
+                "operationId": "search",
+                "parameters": [
+                    {
+                        "name": "search_query",
+                        "in": "path",
+                        "description": "A string containing a list of tags. Tags prefixed with either + or - sign.\n     *              The search should return all files associated with all of the + tags, excluding any files tagged with any of the - tags.",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "string"
+                        },
+                        "example": "+Tag1-Tag2+Tag3"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "required": [
+                                        "id"
+                                    ],
+                                    "properties": {
+                                        "files": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/File"
+                                            }
+                                        },
+                                        "tags": {
+                                            "type": "array",
+                                            "items": {
+                                                "title": "Tag",
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "readOnly": "true",
+                                                        "example": "1"
+                                                    },
+                                                    "name": {
+                                                        "type": "string",
+                                                        "maxLength": 255,
+                                                        "example": "TagName"
+                                                    },
+                                                    "files_count": {
+                                                        "type": "integer",
+                                                        "example": "2"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "File": {
+                "title": "File",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": "true",
+                        "example": "1"
+                    },
+                    "name": {
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "FileName"
+                    }
+                },
+                "type": "object"
+            },
+            "Tag": {
+                "title": "Tag",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": "true",
+                        "example": "1"
+                    },
+                    "name": {
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "TagName"
+                    }
+                },
+                "type": "object"
+            }
+        }
+    },
+    "security": [
+        []
+    ]
+}

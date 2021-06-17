@@ -34,7 +34,14 @@
                     {{ option }}
                 </b-dropdown-item>
             </b-dropdown>
-            <b-button class="float-right" variant="primary" @click.prevent="search">SEARCH</b-button>
+            <b-button
+                class="float-right"
+                variant="primary"
+                :disabled="!selectedTags.length"
+                @click.prevent="search"
+            >
+                SEARCH
+            </b-button>
         </b-card>
         <b-card>
             <h2>RESULTS</h2>

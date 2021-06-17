@@ -24,7 +24,9 @@ class Store extends FormRequest
     public function rules()
     {
         return [
-            //
+            'file' => 'required|file',
+            'tags' => 'required|array',
+            'tags.*' => 'required|string|max:255',
         ];
     }
 }

@@ -6,8 +6,15 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Support\Facades\Storage;
 
+/**
+ * @OA\Schema(
+ *      title="File",
+ *      type="object",
+ *      @OA\Property(property="id", type="integer", readOnly="true", example="1"),
+ *      @OA\Property(property="name", type="string", maxLength=255, example="FileName"),
+ * )
+ */
 class File extends Model
 {
     use HasFactory;
@@ -19,11 +26,6 @@ class File extends Model
     public function tags(): BelongsToMany
     {
         return $this->belongsToMany(Tag::class);
-    }
-
-    public function getUrlAttribute(): string
-    {
-        return Storage::disk()->url($this->name);
     }
 
     public function scopeDoesntHaveTags(Builder $query, array $tags): Builder
