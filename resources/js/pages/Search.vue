@@ -8,7 +8,7 @@
                         :key="key"
                         class="float-left mr-1 mb-1"
                         @click.prevent="removeTag(tag)"
-                    >{{ tag }} x</b-button>
+                    >{{ tag }} ×</b-button>
                 </div>
             </div>
             <div class="row mb-3">
